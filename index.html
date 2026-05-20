@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Music Comb Designer</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__text">
+        <h1>Music Comb Designer</h1>
+        <p>Radial 3D-printable combs from MIDI — defaults to the ancient Hurrian Hymn.</p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel sidebar">
+        <div class="source-tabs" role="tablist">
+          <button
+            type="button"
+            class="source-tab is-active"
+            data-source="hurrian"
+            role="tab"
+            aria-selected="true"
+          >
+            Hurrian Hymn
+          </button>
+          <button
+            type="button"
+            class="source-tab"
+            data-source="midi"
+            role="tab"
+            aria-selected="false"
+          >
+            Custom MIDI
+          </button>
+        </div>
+
+        <section id="panelMidi" class="panel-section is-hidden" aria-hidden="true">
+          <label class="drop-zone" id="dropZone">
+            <input type="file" id="midiFile" accept=".mid,.midi,audio/midi" />
+            <span class="drop-zone__icon" aria-hidden="true">♪</span>
+            <strong>Drop MIDI or click to browse</strong>
+            <span id="fileLabel" class="drop-zone__file">No file loaded</span>
+          </label>
+          <div class="field">
+            <label for="trackSelect">Track</label>
+            <select id="trackSelect" disabled></select>
+          </div>
+          <label class="check-row">
+            <input type="checkbox" id="useAllTracks" />
+            Merge all tracks
+          </label>
+        </section>
+
+        <section id="panelHurrian" class="panel-section hurrian-banner">
+          <p class="hurrian-banner__title">Hurrian Hymn No. 6</p>
+          <p class="hurrian-banner__desc">
+            Kilmer (1974) reconstruction · 54 prongs · ~1400 BCE Ugarit
+          </p>
+        </section>
+
+        <section class="panel-section">
+          <div class="field">
+            <label for="songName">Download name</label>
+            <input type="text" id="songName" value="hurrian-hymn" />
+          </div>
+          <div class="field">
+            <label for="numProngs"
+              >Prongs <span id="numProngsVal" class="val">54</span></label
+            >
+            <input type="range" id="numProngs" min="12" max="72" value="54" />
+          </div>
+        </section>
+
+        <details class="advanced">
+          <summary>Advanced mapping</summary>
+          <div class="advanced__body">
+            <div class="field">
+              <label for="mapping">Note per slot</label>
+              <select id="mapping">
+                <option value="highest">Highest pitch</option>
+                <option value="average">Average pitch</option>
+                <option value="last">Last onset</option>
+              </select>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="minMidi">Low MIDI</label>
+                <input type="number" id="minMidi" value="48" min="0" max="127" />
+              </div>
+              <div class="field">
+                <label for="maxMidi">High MIDI</label>
+                <input type="number" id="maxMidi" value="84" min="0" max="127" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="minLen">Short (mm)</label>
+                <input type="number" id="minLen" value="14" min="5" max="30" step="0.5" />
+              </div>
+              <div class="field">
+                <label for="maxLen">Long (mm)</label>
+                <input type="number" id="maxLen" value="38" min="20" max="50" step="0.5" />
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <dl class="stats">
+          <div class="stat">
+            <dt>Prongs</dt>
+            <dd id="metaProngs">54</dd>
+          </div>
+          <div class="stat">
+            <dt>Length</dt>
+            <dd id="metaRange">14–38 mm</dd>
+          </div>
+          <div class="stat">
+            <dt>Duration</dt>
+            <dd id="metaDuration">—</dd>
+          </div>
+        </dl>
+
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="btnStl">
+            Download STL pair (ZIP)
+          </button>
+          <button type="button" class="btn btn-gold" id="btnPlay">
+            Preview spin &amp; play
+          </button>
+          <button type="button" class="btn btn-ghost" id="btnJson">Export JSON</button>
+        </div>
+      </aside>
+
+      <section class="panel preview-panel">
+        <div class="preview-header">
+          <h2>Preview</h2>
+          <div class="preview-toggles">
+            <label class="check-row check-row--inline">
+              <input type="checkbox" id="showSpinner" checked />
+              Show spinner
+            </label>
+            <label class="check-row check-row--inline">
+              <input type="checkbox" id="playAudio" checked />
+              Play sound
+            </label>
+          </div>
+        </div>
+        <canvas id="preview" width="520" height="520" aria-label="Comb preview"></canvas>
+        <p id="statusLine" class="status-line">
+          Align spinner arrow with ▲, spin counter-clockwise to play.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Print both STLs flat. For fused solids:
+        <code>python3 scripts/build_from_config.py config.json</code>
+      </p>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
